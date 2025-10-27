@@ -33,7 +33,8 @@ fhevm-react-template/
 ├── examples/
 │   ├── nextjs/              # Next.js example (required)
 │   ├── react/               # React + Vite example
-│   └── nodejs/              # Node.js backend example
+│   ├── nodejs/              # Node.js backend example
+│   └── voting-dapp/         # Real voting dApp (imported from working project)
 ├── contracts/               # Solidity contracts
 ├── scripts/                 # Deployment scripts
 ├── hardhat.config.js        # Hardhat configuration
@@ -85,6 +86,13 @@ npm run dev
 cd examples/nodejs
 npm install
 npm start
+```
+
+#### Privacy Voting DApp (Imported Example)
+```bash
+cd examples/voting-dapp
+npm install
+npm run dev
 ```
 
 ## 💻 Usage
@@ -236,6 +244,18 @@ Server-side encryption service:
 - API integration ready
 
 See `examples/nodejs/` for complete code.
+
+### Privacy Voting DApp - Real Implementation
+
+**Imported from working voting system** - complete privacy-preserving governance:
+- Wallet connection and FHEVM initialization
+- Voter registration on-chain
+- Create voting proposals
+- Cast encrypted votes
+- Vote delegation with privacy
+- Real smart contract on Sepolia testnet
+
+See `examples/voting-dapp/` for complete code.
 
 ## 🔧 Development
 
