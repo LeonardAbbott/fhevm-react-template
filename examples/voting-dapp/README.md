@@ -1,251 +1,153 @@
-# Privacy Voting DApp - FHEVM SDK Integration Example
+# Privacy Voting DApp - React + FHEVM SDK
 
-This example demonstrates a complete privacy-preserving voting system integrated with the FHEVM SDK. It's imported from a working implementation and showcases real-world usage of encrypted voting.
+## 🗳️ Overview
 
-## 🎯 Overview
+A modern React-based decentralized voting system built on Ethereum that enables privacy-preserving delegated voting through FHEVM SDK integration. This system allows users to either vote directly on proposals or delegate their voting power to trusted representatives while maintaining complete privacy of vote choices.
 
-This dApp is a **real-world example** imported from an existing privacy voting implementation, demonstrating:
+**Architecture**: React 18 + Vite + FHEVM SDK + Ethers.js
 
-- **Full FHEVM SDK Integration**: Complete encryption/decryption workflow
-- **Privacy-Preserving Voting**: All votes encrypted using FHE
-- **Vote Delegation**: Delegate voting power while maintaining privacy
-- **On-Chain Governance**: Real smart contract interaction on Sepolia testnet
+## 🔐 Core Concepts
 
-## 📋 Features
+### Delegated Voting System
+- **Direct Voting**: Users can vote directly on active proposals with their voting power
+- **Delegation**: Users can delegate their voting power to trusted representatives
+- **Flexible Authority**: Delegations can be revoked at any time, returning voting power to the original holder
+- **Privacy Protection**: All votes are encrypted using FHE (Fully Homomorphic Encryption) technology
 
-### Core Functionality
-- ✅ Wallet connection with MetaMask
-- ✅ FHEVM SDK initialization
-- ✅ Voter registration on-chain
-- ✅ Create voting proposals
-- ✅ Cast encrypted votes
-- ✅ Delegate voting power
-- ✅ Revoke delegation
+### Privacy Proxy Voting
+- **Encrypted Votes**: All voting choices are encrypted and stored on-chain
+- **Anonymous Tallying**: Vote counts are computed on encrypted data without revealing individual choices
+- **Authorized Decryption**: Only contract owners with proper decryption keys can reveal final results
+- **Complete Anonymity**: Individual voting preferences remain private throughout the entire process
 
-### Privacy Features
-- 🔐 **Vote Encryption**: Votes encrypted using FHEVM SDK before submission
-- 🔐 **Private Delegation**: Delegation maintains privacy
-- 🔐 **Encrypted Storage**: All votes stored encrypted on-chain
-- 🔐 **Secure Decryption**: Only authorized parties can decrypt results
+## 🚀 Features
 
-## 🚀 Quick Start
+- **🔐 FHE Encryption**: Advanced privacy protection using Fully Homomorphic Encryption
+- **👥 Flexible Delegation**: Delegate voting power to trusted representatives
+- **📊 Transparent Governance**: View proposals and participate in democratic decision-making  
+- **🛡️ Privacy-First**: Vote choices remain encrypted and private
+- **⚡ Real-time Updates**: Instant feedback on transactions and voting status
+- **🌐 Web3 Integration**: Seamless MetaMask integration for Ethereum interactions
 
-### Installation
+## 📋 Smart Contract
 
-```bash
-npm install
-```
-
-### Configuration
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env` with your contract address:
-```
-VITE_CONTRACT_ADDRESS=0xYourContractAddress
-```
-
-### Run Development Server
-
-```bash
-npm run dev
-```
-
-Visit http://localhost:3001
-
-## 💻 Usage
-
-### 1. Connect Wallet
-
-Click "Connect Wallet & Initialize FHEVM" to:
-- Connect MetaMask
-- Switch to Sepolia testnet
-- Initialize FHEVM SDK
-- Load user data
-
-### 2. Register as Voter
-
-First-time users must register:
-```javascript
-// Automatically handled by the UI
-await contract.registerVoter(userAddress);
-```
-
-### 3. Vote on Proposals
-
-Cast encrypted votes:
-```javascript
-// Encrypt vote using FHEVM SDK
-const encryptedVote = fhevmClient.encryptBool(isYes);
-
-// Submit to blockchain
-await contract.vote(proposalId, isYes, encryptedVote);
-```
-
-### 4. Delegate Voting Power (Optional)
-
-Transfer voting power to trusted representative:
-```javascript
-await contract.delegateVote(delegateAddress);
-```
-
-## 🔧 SDK Integration
-
-### Initialize FHEVM SDK
-
-```javascript
-import { FhevmClient } from 'fhevm-sdk';
-
-const fhevmClient = new FhevmClient({
-  provider: browserProvider,
-  contractAddress: CONTRACT_ADDRESS,
-});
-
-await fhevmClient.initialize();
-```
-
-### Encrypt Values
-
-```javascript
-// Encrypt boolean (vote)
-const encryptedVote = fhevmClient.encryptBool(true);
-
-// Encrypt number
-const encryptedValue = fhevmClient.encryptUint32(42);
-```
-
-### Submit Encrypted Data
-
-```javascript
-// Use encrypted data in contract calls
-const tx = await contract.vote(
-  proposalId,
-  voteChoice,
-  encryptedVote  // Encrypted data from SDK
-);
-await tx.wait();
-```
-
-## 📁 Project Structure
-
-```
-voting-dapp/
-├── src/
-│   ├── main.js       # Entry point, SDK initialization
-│   ├── app.js        # Main app logic
-│   └── style.css     # Styling
-├── index.html        # HTML template
-├── package.json      # Dependencies
-└── README.md         # This file
-```
-
-## 🎓 Learning Points
-
-### FHEVM SDK Integration
-
-This example demonstrates:
-
-1. **Initialization**
-   ```javascript
-   const client = new FhevmClient({ provider, contractAddress });
-   await client.initialize();
-   ```
-
-2. **Encryption**
-   ```javascript
-   const encrypted = client.encryptBool(value);
-   ```
-
-3. **Contract Integration**
-   ```javascript
-   await contract.vote(id, choice, encrypted);
-   ```
-
-### Privacy Workflow
-
-1. User selects vote choice (Yes/No)
-2. FHEVM SDK encrypts the choice locally
-3. Encrypted vote submitted to blockchain
-4. Vote stored encrypted on-chain
-5. Results decrypted only by authorized parties
-
-## 🌐 Smart Contract
-
-**Network**: Ethereum Sepolia Testnet
-
+**Network**: Ethereum Sepolia Testnet  
 **Contract Address**: `0xA52413121E6C22502efACF91714889f85BaA9A88`
 
-**Features**:
-- Voter registration
-- Proposal creation
-- Encrypted voting
-- Vote delegation
-- Result decryption (owner only)
+### Key Functions
+- `vote()` - Cast encrypted votes on proposals
+- `delegateVote()` - Delegate voting power to representatives  
+- `revokeDelegation()` - Reclaim delegated voting power
+- `createProposal()` - Create new voting proposals (owner only)
+- `getProposalResults()` - Decrypt and view results (owner only)
 
-## 🔑 Key Components
+## 🎥 Demo
 
-### Voter Registration
-```javascript
-function registerVoter() {
-  const tx = await contract.registerVoter(userAddress);
-  await tx.wait();
-}
+### Live Application
+🌐 **Website**: [https://delegated-voting.vercel.app/](https://delegated-voting.vercel.app/)
+
+### Video Demonstration
+📹 **Demo Video**: Available in the repository showing complete voting workflow including:
+- Wallet connection and FHE key generation
+- Voter registration process
+- Creating blockchain proposals
+- Direct voting with encryption
+- Delegation to representatives
+- Result decryption by authorized parties
+
+### On-Chain Transactions
+📸 **Transaction Screenshots**: View real blockchain interactions including:
+- Voter registration transactions
+- Proposal creation on Sepolia testnet
+- Encrypted vote submissions
+- Delegation transactions with gas fees
+- Smart contract interactions via MetaMask
+
+## 🛠️ Technology Stack
+
+- **Frontend**: React 18, JSX components with hooks
+- **Build Tool**: Vite 5 with HMR and fast refresh
+- **Blockchain**: Solidity, Ethereum, Sepolia Testnet
+- **Encryption**: FHEVM SDK with Fully Homomorphic Encryption
+- **Web3**: ethers.js v6, MetaMask integration
+- **Deployment**: Vercel hosting platform
+
+## 📦 React Component Architecture
+
+```
+src/
+├── components/
+│   ├── App.jsx                 # Main application container
+│   ├── WalletConnect.jsx       # Initial connection screen
+│   ├── MessageDisplay.jsx      # Status message display
+│   ├── VoterRegistration.jsx   # On-chain voter registration
+│   ├── VoteDelegation.jsx      # Delegate voting power
+│   ├── VotingSection.jsx       # Load and manage voting
+│   ├── ProposalsList.jsx       # Display proposals
+│   └── ProposalManagement.jsx  # Create new proposals
+├── main.jsx                    # React app entry point
+└── style.css                   # Global styles
 ```
 
-### Encrypted Voting
-```javascript
-async function vote(proposalId, isYes) {
-  // Encrypt using SDK
-  const encrypted = fhevmClient.encryptBool(isYes);
+**Key Features:**
+- React Hooks for state management (useState, useEffect)
+- Modular component structure for maintainability
+- Async/await for blockchain interactions
+- Loading states and error handling
+- Real-time UI updates after transactions
 
-  // Submit to contract
-  const tx = await contract.vote(proposalId, isYes, encrypted);
-  await tx.wait();
-}
-```
+## 🔧 Usage
 
-### Vote Delegation
-```javascript
-async function delegateVote(delegateAddress) {
-  const tx = await contract.delegateVote(delegateAddress);
-  await tx.wait();
-}
-```
+### Getting Started
+1. Visit the live application at [delegated-voting.vercel.app](https://delegated-voting.vercel.app/)
+2. Connect your MetaMask wallet (ensure you're on Sepolia testnet)
+3. Register as a voter through the interface
+4. Generate FHE encryption keys automatically
 
-## 🛠 Development
+### Voting Process
+1. **Direct Voting**: Select proposals and cast encrypted votes
+2. **Delegation**: Choose trusted representatives to vote on your behalf
+3. **Management**: Monitor delegation status and revoke when needed
+4. **Privacy**: All vote choices remain encrypted until authorized decryption
 
-### Build for Production
+### Key Features in Action
+- **Voter Registration**: Register yourself and delegate candidates
+- **Proposal Creation**: Create new proposals for community voting
+- **Encrypted Voting**: Cast votes with automatic FHE encryption
+- **Result Decryption**: View decrypted results (contract owner only)
+- **Delegation Management**: Delegate, monitor, and revoke voting power
 
-```bash
-npm run build
-```
+## 🔍 Privacy & Security
 
-### Preview Production Build
+- **Zero-Knowledge**: Individual votes remain private during the entire process
+- **Homomorphic Encryption**: Enables computation on encrypted vote data
+- **Decentralized Trust**: No central authority can access individual vote choices
+- **Transparent Process**: All transactions verifiable on Ethereum blockchain
+- **Flexible Permissions**: Users maintain full control over their voting power
 
-```bash
-npm run preview
-```
+## 📊 Contract Verification
 
-## 📝 Notes
+View the smart contract on Etherscan:
+- **Sepolia Testnet**: [https://sepolia.etherscan.io/address/0xA52413121E6C22502efACF91714889f85BaA9A88](https://sepolia.etherscan.io/address/0xA52413121E6C22502efACF91714889f85BaA9A88)
 
-- This is a **real implementation** imported from a working voting system
-- Demonstrates **production-ready** FHEVM SDK integration
-- All votes are **truly encrypted** using FHE
-- Contract is deployed on **Sepolia testnet**
-- Requires MetaMask and Sepolia ETH for transactions
+## 🤝 Contributing
 
-## 🔗 Related
+We welcome contributions to improve the delegated voting system! Please feel free to:
+- Submit bug reports and feature requests
+- Contribute code improvements
+- Enhance documentation
+- Test the system and provide feedback
 
-- **Main SDK**: `../../packages/fhevm-sdk`
-- **Contract**: `../../contracts/PrivateVoting.sol`
-- **Deployment**: See main project README
+## 📞 Links
 
-## 📄 License
+- **GitHub Repository**: [https://github.com/LeonardAbbott/DelegatedVoting](https://github.com/LeonardAbbott/DelegatedVoting)
+- **Live Demo**: [https://delegated-voting.vercel.app/](https://delegated-voting.vercel.app/)
+- **Smart Contract**: [Sepolia Etherscan](https://sepolia.etherscan.io/address/0xA52413121E6C22502efACF91714889f85BaA9A88)
 
-MIT
+## 📜 License
+
+This project is licensed under the MIT License - see the repository for details.
 
 ---
 
-**🔐 This example showcases real-world privacy-preserving voting with FHEVM SDK integration**
+**Built with ❤️ for decentralized democracy and privacy-preserving governance**

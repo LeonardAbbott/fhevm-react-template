@@ -10,6 +10,7 @@ const nextConfig = {
     };
     return config;
   },
+  transpilePackages: ['fhevm-sdk'],
 };
 
 module.exports = nextConfig;
